@@ -149,9 +149,10 @@
         }
 
         .images-container {
-            max-width: var(--page-width, 900px);
+            width: var(--page-width, 90%);
+            max-width: 100%;
             margin: 0 auto;
-            transition: max-width 0.3s ease;
+            transition: width 0.3s ease;
         }
 
         .scan-image {
@@ -282,11 +283,11 @@
                 </div>
 
                 <div class="width-control">
-                    <span class="width-label">📏 Largeur</span>
-                    <input type="range" min="600" max="1400" value="900" step="50" 
+                    <span class="width-label">zoom</span>
+                    <input type="range" min="50" max="100" value="90" step="5" 
                            class="width-slider" id="width-slider" 
                            oninput="updatePageWidth(this.value)">
-                    <span class="width-label" id="width-value">900px</span>
+                    <span class="width-label" id="width-value">90%</span>
                 </div>
             </div>
 
@@ -364,7 +365,7 @@
         let currentChapterIndex = 0;
         let currentImageIndex = 0;
         let readingMode = 'scroll';
-        let pageWidth = 900;
+        let pageWidth = 90;
 
         // Initialisation
         function init() {
@@ -377,11 +378,11 @@
             const saved = localStorage.getItem('pageWidth');
             if (saved) {
                 pageWidth = parseInt(saved);
-                document.documentElement.style.setProperty('--page-width', `${pageWidth}px`);
+                document.documentElement.style.setProperty('--page-width', `${pageWidth}%`);
                 const slider = document.getElementById('width-slider');
                 if (slider) {
                     slider.value = pageWidth;
-                    document.getElementById('width-value').textContent = `${pageWidth}px`;
+                    document.getElementById('width-value').textContent = `${pageWidth}%`;
                 }
             }
         }
@@ -389,8 +390,8 @@
         // Mettre à jour la largeur de la page
         function updatePageWidth(value) {
             pageWidth = parseInt(value);
-            document.documentElement.style.setProperty('--page-width', `${pageWidth}px`);
-            document.getElementById('width-value').textContent = `${pageWidth}px`;
+            document.documentElement.style.setProperty('--page-width', `${pageWidth}%`);
+            document.getElementById('width-value').textContent = `${pageWidth}%`;
             localStorage.setItem('pageWidth', pageWidth);
         }
 
