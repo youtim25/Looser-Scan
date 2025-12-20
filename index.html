@@ -120,23 +120,24 @@
         }
 
         .reader-controls.collapsed {
-            right: -220px;
+            right: -250px;
         }
 
         .toggle-controls {
-            position: absolute;
-            left: -40px;
+            position: fixed;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             background: var(--primary);
             color: white;
             border: none;
             padding: 1rem 0.5rem;
-            border-radius: 8px 0 0 8px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1.2rem;
             transition: background 0.3s;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 91;
         }
 
         .toggle-controls:hover {
@@ -294,7 +295,7 @@
             }
 
             .reader-controls.collapsed {
-                right: -180px;
+                right: -200px;
             }
 
             .container {
@@ -302,7 +303,7 @@
             }
 
             .toggle-controls {
-                left: -35px;
+                right: 5px;
                 padding: 0.75rem 0.4rem;
             }
         }
