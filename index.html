@@ -111,7 +111,7 @@
             padding: 1.5rem 1rem;
             border-radius: 12px 0 0 12px;
             box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
-            z-index: 90;
+            z-index: 89;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -120,7 +120,7 @@
         }
 
         .reader-controls.collapsed {
-            right: -250px;
+            right: -260px;
         }
 
         .toggle-controls {
@@ -131,17 +131,31 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 1rem 0.5rem;
+            padding: 1rem 0.75rem;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.3s;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-            z-index: 91;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            z-index: 999;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .toggle-controls:hover {
             background: var(--primary-dark);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .reader-view .toggle-controls {
+            display: flex;
+        }
+
+        .chapters-view .toggle-controls {
+            display: none;
         }
 
         .control-group {
@@ -330,9 +344,9 @@
 
         <!-- Vue Lecteur -->
         <div id="reader-view" class="reader-view">
+            <button class="toggle-controls" id="toggle-btn" onclick="toggleControls()">◀</button>
+            
             <div class="reader-controls" id="reader-controls">
-                <button class="toggle-controls" onclick="toggleControls()">◀</button>
-                
                 <div class="control-group">
                     <span class="control-label">Navigation</span>
                     <button class="btn btn-secondary" onclick="backToList()">← Retour</button>
@@ -451,7 +465,7 @@
         function toggleControls() {
             controlsCollapsed = !controlsCollapsed;
             const controls = document.getElementById('reader-controls');
-            const toggleBtn = document.querySelector('.toggle-controls');
+            const toggleBtn = document.getElementById('toggle-btn');
             
             if (controlsCollapsed) {
                 controls.classList.add('collapsed');
