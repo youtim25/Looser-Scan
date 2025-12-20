@@ -149,8 +149,9 @@
         }
 
         .images-container {
-            max-width: 900px;
+            max-width: var(--page-width, 900px);
             margin: 0 auto;
+            transition: max-width 0.3s ease;
         }
 
         .scan-image {
@@ -173,6 +174,46 @@
             display: flex;
             gap: 0.5rem;
             align-items: center;
+        }
+
+        .width-control {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .width-slider {
+            width: 120px;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-dark);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .width-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .width-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .width-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            min-width: 60px;
         }
 
         .mode-btn {
@@ -239,6 +280,14 @@
                     <button class="mode-btn active" onclick="setReadingMode('scroll')">Défilement</button>
                     <button class="mode-btn" onclick="setReadingMode('page')">Page par page</button>
                 </div>
+
+                <div class="width-control">
+                    <span class="width-label">📏 Largeur</span>
+                    <input type="range" min="600" max="1400" value="900" step="50" 
+                           class="width-slider" id="width-slider" 
+                           oninput="updatePageWidth(this.value)">
+                    <span class="width-label" id="width-value">900px</span>
+                </div>
             </div>
 
             <div class="images-container" id="images-container">
@@ -258,10 +307,10 @@
             {
                 id: 1,
                 title: "Chapitre 71",
-                folder: "./Chapitre 71 - edit/",
-                thumbnail: "(god game) team présentation.jpg",
+                folder: "./chapitre-71-edit/",
+                thumbnail: "cover.jpg",
                 images: [
-                    "(god game) team présentation.jpg",
+                    "cover.jpg",
                     ...Array.from({length: 59}, (_, i) => `${i + 1}.webp`)
                 ],
                 date: "2024-12-20"
@@ -269,10 +318,10 @@
             {
                 id: 2,
                 title: "Chapitre 72",
-                folder: "./Chapitre 72 - edit/",
-                thumbnail: "(god game) team présentation.jpg",
+                folder: "./chapitre-72-edit/",
+                thumbnail: "cover.jpg",
                 images: [
-                    "(god game) team présentation.jpg",
+                    "cover.jpg",
                     ...Array.from({length: 59}, (_, i) => `${i + 1}.webp`)
                 ],
                 date: "2024-12-21"
@@ -280,10 +329,10 @@
             {
                 id: 3,
                 title: "Chapitre 73",
-                folder: "./Chapitre 73 - edit/",
-                thumbnail: "(god game) team présentation.jpg",
+                folder: "./chapitre-73-edit/",
+                thumbnail: "cover.jpg",
                 images: [
-                    "(god game) team présentation.jpg",
+                    "cover.jpg",
                     ...Array.from({length: 59}, (_, i) => `${i + 1}.webp`)
                 ],
                 date: "2024-12-22"
@@ -291,10 +340,10 @@
             {
                 id: 4,
                 title: "Chapitre 74",
-                folder: "./Chapitre 74 - edit/",
-                thumbnail: "(god game) team présentation.jpg",
+                folder: "./chapitre-74-edit/",
+                thumbnail: "cover.jpg",
                 images: [
-                    "(god game) team présentation.jpg",
+                    "cover.jpg",
                     ...Array.from({length: 59}, (_, i) => `${i + 1}.webp`)
                 ],
                 date: "2024-12-23"
@@ -302,10 +351,10 @@
             {
                 id: 5,
                 title: "Chapitre 75",
-                folder: "./Chapitre 75 - edit/",
-                thumbnail: "(god game) team présentation.jpg",
+                folder: "./chapitre-75-edit/",
+                thumbnail: "cover.jpg",
                 images: [
-                    "(god game) team présentation.jpg",
+                    "cover.jpg",
                     ...Array.from({length: 59}, (_, i) => `${i + 1}.webp`)
                 ],
                 date: "2024-12-24"
@@ -315,10 +364,34 @@
         let currentChapterIndex = 0;
         let currentImageIndex = 0;
         let readingMode = 'scroll';
+        let pageWidth = 900;
 
         // Initialisation
         function init() {
             displayChapters();
+            loadSavedWidth();
+        }
+
+        // Charger la largeur sauvegardée
+        function loadSavedWidth() {
+            const saved = localStorage.getItem('pageWidth');
+            if (saved) {
+                pageWidth = parseInt(saved);
+                document.documentElement.style.setProperty('--page-width', `${pageWidth}px`);
+                const slider = document.getElementById('width-slider');
+                if (slider) {
+                    slider.value = pageWidth;
+                    document.getElementById('width-value').textContent = `${pageWidth}px`;
+                }
+            }
+        }
+
+        // Mettre à jour la largeur de la page
+        function updatePageWidth(value) {
+            pageWidth = parseInt(value);
+            document.documentElement.style.setProperty('--page-width', `${pageWidth}px`);
+            document.getElementById('width-value').textContent = `${pageWidth}px`;
+            localStorage.setItem('pageWidth', pageWidth);
         }
 
         // Afficher la liste des chapitres
@@ -348,6 +421,7 @@
             
             updateChapterSelector();
             loadChapterImages();
+            loadSavedWidth();
             window.scrollTo(0, 0);
         }
 
