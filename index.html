@@ -103,15 +103,58 @@
         }
 
         .reader-controls {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
             background: var(--bg-card);
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
+            padding: 1.5rem 1rem;
+            border-radius: 12px 0 0 12px;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 90;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: right 0.3s ease;
+            max-width: 250px;
+        }
+
+        .reader-controls.collapsed {
+            right: -220px;
+        }
+
+        .toggle-controls {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 0.5rem;
+            border-radius: 8px 0 0 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-controls:hover {
+            background: var(--primary-dark);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .control-label {
+            color: var(--text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn {
@@ -121,9 +164,11 @@
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: background 0.3s;
             font-weight: 500;
+            width: 100%;
+            text-align: center;
         }
 
         .btn:hover {
@@ -144,8 +189,9 @@
             background: var(--bg-dark);
             color: var(--text);
             border: 2px solid var(--primary);
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
+            width: 100%;
         }
 
         .images-container {
@@ -153,6 +199,7 @@
             max-width: 100%;
             margin: 0 auto;
             transition: width 0.3s ease;
+            padding-right: 0;
         }
 
         .scan-image {
@@ -173,18 +220,18 @@
         /* Mode lecture */
         .reading-mode {
             display: flex;
+            flex-direction: column;
             gap: 0.5rem;
-            align-items: center;
         }
 
         .width-control {
             display: flex;
-            gap: 0.5rem;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
         .width-slider {
-            width: 120px;
+            width: 100%;
             height: 6px;
             border-radius: 3px;
             background: var(--bg-dark);
@@ -214,17 +261,19 @@
         .width-label {
             color: var(--text-dim);
             font-size: 0.9rem;
-            min-width: 60px;
+            text-align: center;
         }
 
         .mode-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1rem;
             background: var(--bg-dark);
             border: 2px solid transparent;
             color: var(--text-dim);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.85rem;
+            width: 100%;
         }
 
         .mode-btn.active {
@@ -240,11 +289,21 @@
             }
 
             .reader-controls {
-                flex-direction: column;
+                max-width: 200px;
+                padding: 1rem 0.75rem;
+            }
+
+            .reader-controls.collapsed {
+                right: -180px;
             }
 
             .container {
                 padding: 1rem;
+            }
+
+            .toggle-controls {
+                left: -35px;
+                padding: 0.75rem 0.4rem;
             }
         }
 
@@ -270,24 +329,37 @@
 
         <!-- Vue Lecteur -->
         <div id="reader-view" class="reader-view">
-            <div class="reader-controls">
-                <button class="btn btn-secondary" onclick="backToList()">← Retour</button>
+            <div class="reader-controls" id="reader-controls">
+                <button class="toggle-controls" onclick="toggleControls()">◀</button>
                 
-                <select class="chapter-selector" id="chapter-selector" onchange="changeChapter(this.value)">
-                    <!-- Options ajoutées dynamiquement -->
-                </select>
-
-                <div class="reading-mode">
-                    <button class="mode-btn active" onclick="setReadingMode('scroll')">Défilement</button>
-                    <button class="mode-btn" onclick="setReadingMode('page')">Page par page</button>
+                <div class="control-group">
+                    <span class="control-label">Navigation</span>
+                    <button class="btn btn-secondary" onclick="backToList()">← Retour</button>
                 </div>
 
-                <div class="width-control">
-                    <span class="width-label">📏 Largeur</span>
-                    <input type="range" min="50" max="100" value="90" step="5" 
-                           class="width-slider" id="width-slider" 
-                           oninput="updatePageWidth(this.value)">
-                    <span class="width-label" id="width-value">90%</span>
+                <div class="control-group">
+                    <span class="control-label">Chapitre</span>
+                    <select class="chapter-selector" id="chapter-selector" onchange="changeChapter(this.value)">
+                        <!-- Options ajoutées dynamiquement -->
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <span class="control-label">Mode lecture</span>
+                    <div class="reading-mode">
+                        <button class="mode-btn active" onclick="setReadingMode('scroll')">📜 Défilement</button>
+                        <button class="mode-btn" onclick="setReadingMode('page')">📄 Page par page</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <span class="control-label">Largeur</span>
+                    <div class="width-control">
+                        <input type="range" min="50" max="100" value="90" step="5" 
+                               class="width-slider" id="width-slider" 
+                               oninput="updatePageWidth(this.value)">
+                        <span class="width-label" id="width-value">90%</span>
+                    </div>
                 </div>
             </div>
 
@@ -366,11 +438,27 @@
         let currentImageIndex = 0;
         let readingMode = 'scroll';
         let pageWidth = 90;
+        let controlsCollapsed = false;
 
         // Initialisation
         function init() {
             displayChapters();
             loadSavedWidth();
+        }
+
+        // Basculer l'affichage des contrôles
+        function toggleControls() {
+            controlsCollapsed = !controlsCollapsed;
+            const controls = document.getElementById('reader-controls');
+            const toggleBtn = document.querySelector('.toggle-controls');
+            
+            if (controlsCollapsed) {
+                controls.classList.add('collapsed');
+                toggleBtn.textContent = '▶';
+            } else {
+                controls.classList.remove('collapsed');
+                toggleBtn.textContent = '◀';
+            }
         }
 
         // Charger la largeur sauvegardée
