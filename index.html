@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecteur de Scans Automatique</title>
+    <script src="data.js"></script>
+    <style>
+        /* (Gardez votre CSS actuel, il est très bien) */
+        /* J'ajoute juste une petite correction pour les images */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); }
+        .header { background: var(--bg-card); padding: 1.5rem; position: sticky; top: 0; z-index: 100; text-align: center; }
+        .header h1 { color: var(--primary); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .chapters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .chapter-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+        .chapter-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .chapter-thumbnail { width: 100%; height: 250px; object-fit: cover; }
+        .chapter-info { padding: 1rem; }
+        .reader-view { display: none; }
+        .reader-view.active { display: block; }
+        .reader-controls { background: var(--bg-card); padding: 1rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .images-container { width: var(--page-width, 80%); margin: 0 auto; }
+        .scan-image { width: 100%; display: block; }
+        .btn { background: var(--primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
+        .chapter-selector { padding: 0.5rem; border-radius: 5px; background: #000; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Mon Lecteur de Scans</h1>
+    </div>
+
+    <div class="container">
+        <div id="chapters-view">
+            <div class="chapters-grid" id="chapters-grid"></div>
+        </div>
+
+        <div id="reader-view" class="reader-view">
+            <div class="reader-controls">
+                <button class="btn" onclick="backToList()">← Retour</button>
+                <select class="chapter-selector" id="chapter-selector" onchange="changeChapter(this.value)"></select>
+                <div>
+                    <input type="range" min="30" max="100" value="80" oninput="updateWidth(this.value)">
+                </div>
+            </div>
+            <div class="images-container" id="images-container"></div>
+            <div style="display: flex; justify-content: center; gap: 20px; padding: 2rem;">
+                <button class="btn" onclick="previousChapter()">Chapitre Précédent</button>
+                <button class="btn" onclick="nextChapter()">Chapitre Suivant</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentChapterIndex = 0;
+
+        function init() {
+            if (typeof chapters === 'undefined' || chapters.length === 0) {
+                document.getElementById('chapters-grid').innerHTML = "<p>Aucun chapitre trouvé. Lancez 'scan.py' pour générer la liste.</p>";
+                return;
+            }
+            displayChapters();
+        }
+
+        function displayChapters() {
+            const grid = document.getElementById('chapters-grid');
+            grid.innerHTML = chapters.map((ch, i) => `
+                <div class="chapter-card" onclick="openChapter(${i})">
+                    <img src="${ch.folder}${ch.thumbnail}" class="chapter-thumbnail" loading="lazy">
+                    <div class="chapter-info">
+                        <h3>${ch.title}</h3>
+                        <p>${ch.images.length} pages</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openChapter(index) {
+            currentChapterIndex = index;
+            document.getElementById('chapters-view').style.display = 'none';
+            document.getElementById('reader-view').classList.add('active');
+            
+            // Mise à jour du sélecteur
+            const selector = document.getElementById('chapter-selector');
+            selector.innerHTML = chapters.map((ch, i) => `<option value="${i}" ${i === index ? 'selected' : ''}>${ch.title}</option>`).join('');
+
+            // Chargement des images
+            const container = document.getElementById('images-container');
+            container.innerHTML = chapters[index].images.map(img => `
+                <img src="${chapters[index].folder}${img}" class="scan-image" loading="lazy">
+            `).join('');
+            
+            window.scrollTo(0, 0);
+        }
+
+        function changeChapter(index) { openChapter(parseInt(index)); }
+        function nextChapter() { if(currentChapterIndex < chapters.length -1) openChapter(currentChapterIndex + 1); }
+        function previousChapter() { if(currentChapterIndex > 0) openChapter(currentChapterIndex - 1); }
+        function backToList() {
+            document.getElementById('chapters-view').style.display = 'block';
+            document.getElementById('reader-view').classList.remove('active');
+        }
+        function updateWidth(v) {
+            document.querySelector('.images-container').style.width = v + '%';
+        }
+
+        init();
+    </script>
+</body>
+</html>
