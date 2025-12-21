@@ -8,7 +8,7 @@ DOSSIER_CHAPITRES = "." # Le dossier où sont vos dossiers de chapitres
 def generer_donnees():
     chapters = []
     # On liste les dossiers qui commencent par "Chapitre"
-    dossiers = [d for d in os.listdir(DOSSIER_CHAPITRES) if os.path.isdir(d) and "Chapitre" in d]
+    dossiers = [d for d in os.listdir(DOSSIER_CHAPITRES) if os.path.isdir(d) and "chapitre" in d.lower()]
     # Tri alphabétique (pour avoir 71, 72, 73...)
     dossiers.sort()
 
