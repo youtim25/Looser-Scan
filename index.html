@@ -33,8 +33,9 @@
         .header { 
             background: var(--bg-card); 
             padding: 1rem 2rem; 
-            position: sticky; 
+            position: absolute; /* Changé de sticky à absolute */
             top: 0; 
+            width: 100%; /* Ajouté pour s'assurer que le bandeau prend toute la largeur */
             z-index: 100;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
