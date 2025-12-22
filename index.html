@@ -33,9 +33,7 @@
         .header { 
             background: var(--bg-card); 
             padding: 1rem 2rem; 
-            position: absolute; /* Changé de sticky à absolute */
-            top: 0; 
-            width: 100%; /* Ajouté pour s'assurer que le bandeau prend toute la largeur */
+            position: relative; /* L'élément reste à sa place naturelle */
             z-index: 100;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
@@ -119,14 +117,13 @@
             gap: 0;
             position: relative;
         }
-        
-        /* Sidebar Controls */
+            
         .sidebar-controls {
             position: fixed;
             right: 0;
-            top: 82px;
+            top: 0; /* Aligné en haut de l'écran */
             width: var(--sidebar-width);
-            height: calc(100vh - 82px);
+            height: 100vh; /* Prend toute la hauteur de l'écran */
             background: var(--bg-card);
             box-shadow: -4px 0 12px rgba(0,0,0,0.3);
             padding: 2rem 1.5rem;
@@ -136,7 +133,7 @@
             display: flex;
             flex-direction: column;
             gap: 2rem;
-        }
+            }
         
         .sidebar-controls.hidden {
             transform: translateX(100%);
