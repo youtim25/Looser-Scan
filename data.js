@@ -262,5 +262,38 @@ const scansData = {
                 "date": "Ajouté récemment"
             }
         ]
+    },
+    "lord_of_mysterie": {
+        "name": "Lord of mysterie",
+        "chapters": [
+            {
+                "id": 1,
+                "title": "chapitre 14",
+                "folder": "./Lord of mysterie/chapitre 14/",
+                "thumbnail": "1.jpg",
+                "images": [
+                    "1.jpg",
+                    "2.jpg",
+                    "3.jpg",
+                    "4.jpg",
+                    "5.jpg",
+                    "6.jpg",
+                    "7.jpg",
+                    "8.jpg",
+                    "9.jpg",
+                    "10 version 2.jpg",
+                    "11.jpg",
+                    "12.jpg",
+                    "13.jpg",
+                    "14.jpg",
+                    "15.jpg",
+                    "16.jpg",
+                    "17.jpg",
+                    "18.jpg",
+                    "19.jpg"
+                ],
+                "date": "Ajouté récemment"
+            }
+        ]
     }
 };
