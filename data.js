@@ -270,8 +270,9 @@ const scansData = {
                 "id": 1,
                 "title": "chapitre 14",
                 "folder": "./Lord of mysterie/chapitre 14/",
-                "thumbnail": "1.jpg",
+                "thumbnail": "0.jpg",
                 "images": [
+                    "0.jpg",
                     "1.jpg",
                     "2.jpg",
                     "3.jpg",
