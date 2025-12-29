@@ -75,8 +75,9 @@ const scansData = {
                 "id": 2,
                 "title": "Chapitre 72",
                 "folder": "./God game/Chapitre 72/",
-                "thumbnail": "0.jpg",
+                "thumbnail": "(god game) team présentation.jpg",
                 "images": [
+                    "(god game) team présentation.jpg",
                     "0.jpg",
                     "1.jpg",
                     "2.jpg",
@@ -160,8 +161,9 @@ const scansData = {
                 "id": 3,
                 "title": "Chapitre 73",
                 "folder": "./God game/Chapitre 73/",
-                "thumbnail": "0.webp",
+                "thumbnail": "(god game) team présentation.jpg",
                 "images": [
+                    "(god game) team présentation.jpg",
                     "0.webp",
                     "2.webp",
                     "3.webp",
